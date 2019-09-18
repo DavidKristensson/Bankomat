@@ -1,15 +1,19 @@
 import os
+import json
 import datetime
 date = datetime.datetime.today()
 cls = lambda: os.system('cls')
-transaktions = (f"Account number ")
+
 accNmbDict = {}
-transList = []
- #with open("transactions.txt") as file:
- #       transList = file.read(file)
-#def AddTransaktion(logInAccNmb, depositInput):
- #   stringen = (f"Date: {date} Account number: {logInAccNmb}, Amount: {}, Type: {}")
-    ###SKAPA VARIABLER FÖR OVANSTÅENDE###
+
+def TransJsonLoad():
+    with open("transaktioner.txt") as json_file:
+        accNmbDict = json.load(json_file)
+
+def TransJsonSave():
+    with open("Transactions.txt", "a+") as json_file:
+        json.dump(accNmbDict,json_file)
+
 def CheckIfInt():
     while True:
         try:
@@ -17,7 +21,7 @@ def CheckIfInt():
             return methodInput
         except:
             print("Invalid input, try again")
-#########Felsökning########
+
 def CreateAcc():
     cls()
     print("------Create Account-----")
@@ -28,6 +32,7 @@ def CreateAcc():
             print("This account number is not available")
         else:
             accNmbDict[createAccNmb] = 0
+            TransJsonSave()
             print(f"Your account wih account number {createAccNmb} has been created")
             input("Press Enter to continue")
             return accNmbDict
@@ -41,7 +46,7 @@ def LogIn():
     else:
         print("That account number does not exist.")
         input("Press Enter to continue")
-######Meny 1 metoder############
+
 def Deposit(logInAccNmb):
     cls()
     print("------Deposit------")
@@ -52,15 +57,18 @@ def Deposit(logInAccNmb):
         print("Press Enter to continue")
     else:
         accNmbDict[logInAccNmb] += depositInput
-        print(f"depositInput has been deposited to your account")
+        TransJsonSave()
+        print(f"{depositInput} has been deposited to your account")
         input("Press Enter to return")
         return depositInput
+
 def ShowBalance(logInAccNmb):
     cls()
     print("-------Balance------")
     balance = accNmbDict[logInAccNmb]
     print(f"Account balance: {balance}")
     input("Press Enter to return")
+
 def Withdraw(logInAccNmb):
     cls()
     print("-------Withdraw------")
@@ -71,9 +79,10 @@ def Withdraw(logInAccNmb):
         input("Press Enter to continue")
     else:
         accNmbDict[logInAccNmb] -= withdrawInput
+        TransJsonSave()
         print(f"{withdrawInput} has been withdrawn from your account")
         input("Press Enter to return")
-######Meny 2 metoder#######
+
 def AdminAccMenu(logInAccNmb):
     while True:
         cls()
@@ -96,7 +105,7 @@ def AdminAccMenu(logInAccNmb):
         else:
             print("Invalid input, try again")
             input("Press Enter to return")
-#######Meny 2#########
+
 while True:
     cls()
     print("----MAIN MENU----")
@@ -117,9 +126,4 @@ while True:
     else:
         print("Invalid input, try again")
         input("Press Enter to continue")
-        os.system('cls')
-
-
-## FUNKTION FÖR ADD TRANSACTION DÄR STRÄNG KOMMER 
-## MED DATUM TRANSACTION M.M. SPLIT ETC
-## FUNKTION FÖR ATT PRINTA TRANSACTIONER
+        cls
